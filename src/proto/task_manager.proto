@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+package taskmanager;
+
+option go_package = "./pb";
+
+service TaskManager {
+  rpc Create(CreateTaskRequest) returns (GetTaskResponse);
+  rpc Get(IdRequest) returns (GetTaskResponse);
+  rpc Update(UpdateTaskRequest) returns (UpdateTaskResponse);
+  rpc Delete(IdRequest) returns (GetTaskResponse);
+  rpc List(google.protobuf.Empty) returns (ListTasksResponse);
+}
+
+message CreateTaskRequest {
+	string title = 1;
+	optional string description = 2;
+}
+
+message UpdateTaskRequest {
+	uint64 id = 1;
+	optional string title = 2;
+	optional string description = 3;
+}
+
+message IdRequest {
+	uint64 id = 1;
+}
+
+message GetTaskResponse {
+	uint64 id = 1;
+	string title = 2;
+	string description = 3;
+	google.protobuf.Timestamp created_at = 4;
+	google.protobuf.Timestamp updated_at = 5;
+	google.protobuf.Timestamp deleted_at = 6;
+}
+
+message UpdateTaskResponse {
+	uint64 id = 1;
+	optional string title = 2;
+	optional string description = 3;
+	google.protobuf.Timestamp updated_at= 4;
+}
+
+message ListTasksResponse {
+	repeated GetTaskResponse tasks = 1;
+}
