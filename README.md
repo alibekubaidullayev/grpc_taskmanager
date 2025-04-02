@@ -184,6 +184,15 @@ git clone https://github.com/alibekubaidullayev/grpc_taskmanager.git
 cd task-manager
 ```
 
+### 2. Пример .env
+Нужно создать .env в корневой папке проекта где будут написаны данные для использования бд
+```
+DB_HOST=db
+DB_PASW=postgres
+DB_USER=postgres
+```
+
+
 ### 3. Сборка и запуск с Docker  
 Для запуска приложения в Docker-контейнере выполните:
 
