@@ -75,8 +75,7 @@ message GetTaskResponse {
 }
 ```
 
-#### Ссылка на экран:  
-[Link to Screen](#)
+![Alt text](screenshots/Create.png)
 
 ---
 
@@ -102,8 +101,7 @@ message GetTaskResponse {
 }
 ```
 
-#### Ссылка на экран:  
-[Link to Screen](#)
+![Alt text](screenshots/Get.png)
 
 ---
 
@@ -129,8 +127,7 @@ message UpdateTaskResponse {
 }
 ```
 
-#### Ссылка на экран:  
-[Link to Screen](#)
+![Alt text](screenshots/Update.png)
 
 ---
 
@@ -156,8 +153,7 @@ message GetTaskResponse {
 }
 ```
 
-#### Ссылка на экран:  
-[Link to Screen](#)
+![Alt text](screenshots/Delete.png)
 
 ---
 
@@ -176,8 +172,7 @@ message ListTasksResponse {
 }
 ```
 
-#### Ссылка на экран:  
-[Link to Screen](#)
+![Alt text](screenshots/List.png)
 
 ---
 
