@@ -180,7 +180,7 @@ message ListTasksResponse {
 
 ### 1. Клонировать репозиторий
 ```bash
-git clone https://github.com/alibekubaidullayev/task-manager.git
+git clone https://github.com/alibekubaidullayev/grpc_taskmanager.git
 cd task-manager
 ```
 
