@@ -1,9 +1,8 @@
-
 # Task Manager
 
-A simple task management system built with **Go**, **Gorm**, **GRPC**, **PostgreSQL**, and **Docker**. This application allows users to perform basic CRUD operations (Create, Read, Update, Delete) on tasks.
+Простая система управления задачами, созданная с использованием **Go**, **Gorm**, **GRPC**, **PostgreSQL** и **Docker**. Это приложение позволяет пользователям выполнять базовые CRUD-операции (создание, чтение, обновление, удаление) над задачами.
 
-## Technologies Used
+## Используемые технологии
 
 - **Go**
 - **Gorm**
@@ -11,51 +10,52 @@ A simple task management system built with **Go**, **Gorm**, **GRPC**, **Postgre
 - **PostgreSQL**
 - **Docker**
 
-## Task Model (Gorm)
+## Модель Task (Gorm)
 
-The Task model contains the following fields:
+Модель Task содержит следующие поля:
 
-- **ID**: Unique identifier for each task.
-- **Created At**: Timestamp when the task was created.
-- **Updated At**: Timestamp when the task was last updated.
-- **Deleted At**: Timestamp when the task was deleted (soft delete).
-- **Title**: Title of the task.
-- **Description**: Detailed description of the task.
+- **ID**: Уникальный идентификатор задачи.
+- **Created At**: Временная метка создания задачи.
+- **Updated At**: Временная метка последнего обновления задачи.
+- **Deleted At**: Временная метка удаления задачи (мягкое удаление).
+- **Title**: Заголовок задачи.
+- **Description**: Подробное описание задачи.
 
 ```go
 type Task struct {
     ID          uint      `gorm:"primaryKey"`
     CreatedAt   time.Time
     UpdatedAt   time.Time
-    DeletedAt   *time.Time
+    DeletedAt DeletedAt `gorm:"index"`
     Title       string    `gorm:"size:64"`
     Description string    `gorm:"size:512"`
 }
 ```
-## Features
-### 1. Each method returns only required information
-e.g. Upon update only the updated fields and update_at will be returned
 
-### 2. Data structure level validation
-Each method tries to put all coming fields into struct using setters. If field doesn't apply then error will be returned and operation aborted
+## Функциональность
 
-### 3. Application layers separation (if better paraphrase)
-There is Task struct that is responible for working with db. It has methods for converting (and validating) data that comes from GRPC to gorm.Model.
+### 1. Каждый метод возвращает только необходимые данные  
+Например, при обновлении возвращаются только обновлённые поля и `updated_at`.
 
-### 4. Protobuf modification
-If you want to change the GRPC messages then modify src/proto/task_manager.proto and in root directory do
+### 2. Валидация на уровне структуры данных  
+Каждый метод пытается поместить все входящие поля в структуру через сеттеры. Если какое-то поле не подходит, будет возвращена ошибка, и операция будет отменена.
+
+### 3. Разделение слоёв приложения  
+Существует структура Task, которая отвечает за работу с базой данных. Она содержит методы для преобразования (и валидации) данных, поступающих из GRPC, в формат `gorm.Model`.
+
+### 4. Модификация Protobuf  
+Если вы хотите изменить GRPC-сообщения, отредактируйте файл `src/proto/task_manager.proto` и выполните в корневой директории:
 ```bash
 make generate
 ```
-To generate requried files
+Для генерации необходимых файлов.
 
+## GRPC методы сервиса
 
-## GRPC Service Methods
+### 1. **Create**  
+Создаёт новую задачу.
 
-### 1. **Create**
-Creates a new task.
-
-#### Request Object:
+#### Объект запроса:
 ```protobuf
 message CreateTaskRequest {
     string title = 1;
@@ -63,7 +63,7 @@ message CreateTaskRequest {
 }
 ```
 
-#### Response Object:
+#### Объект ответа:
 ```protobuf
 message GetTaskResponse {
     uint64 id = 1;
@@ -75,22 +75,22 @@ message GetTaskResponse {
 }
 ```
 
-#### Screen Link:
+#### Ссылка на экран:  
 [Link to Screen](#)
 
 ---
 
-### 2. **Get**
-Fetches a specific task by ID.
+### 2. **Get**  
+Получает задачу по ID.
 
-#### Request Object:
+#### Объект запроса:
 ```protobuf
 message IdRequest {
     uint64 id = 1;
 }
 ```
 
-#### Response Object:
+#### Объект ответа:
 ```protobuf
 message GetTaskResponse {
     uint64 id = 1;
@@ -102,15 +102,15 @@ message GetTaskResponse {
 }
 ```
 
-#### Screen Link:
+#### Ссылка на экран:  
 [Link to Screen](#)
 
 ---
 
-### 3. **Update**
-Updates an existing task.
+### 3. **Update**  
+Обновляет существующую задачу.
 
-#### Request Object:
+#### Объект запроса:
 ```protobuf
 message UpdateTaskRequest {
     uint64 id = 1;
@@ -119,7 +119,7 @@ message UpdateTaskRequest {
 }
 ```
 
-#### Response Object:
+#### Объект ответа:
 ```protobuf
 message UpdateTaskResponse {
     uint64 id = 1;
@@ -129,22 +129,22 @@ message UpdateTaskResponse {
 }
 ```
 
-#### Screen Link:
+#### Ссылка на экран:  
 [Link to Screen](#)
 
 ---
 
-### 4. **Delete**
-Deletes a task by ID (soft delete).
+### 4. **Delete**  
+Удаляет задачу по ID (мягкое удаление).
 
-#### Request Object:
+#### Объект запроса:
 ```protobuf
 message IdRequest {
     uint64 id = 1;
 }
 ```
 
-#### Response Object:
+#### Объект ответа:
 ```protobuf
 message GetTaskResponse {
     uint64 id = 1;
@@ -156,48 +156,47 @@ message GetTaskResponse {
 }
 ```
 
-#### Screen Link:
+#### Ссылка на экран:  
 [Link to Screen](#)
 
 ---
 
-### 5. **List**
-Fetches all tasks.
+### 5. **List**  
+Получает список всех задач.
 
-#### Request Object:
+#### Объект запроса:
 ```
 Empty
 ```
 
-#### Response Object:
+#### Объект ответа:
 ```protobuf
 message ListTasksResponse {
     repeated GetTaskResponse tasks = 1;
 }
 ```
 
-#### Screen Link:
+#### Ссылка на экран:  
 [Link to Screen](#)
 
 ---
 
-## Setup Instructions
+## Инструкция по запуску
 
-### 1. Clone the repository
+### 1. Клонировать репозиторий
 ```bash
 git clone https://github.com/alibekubaidullayev/task-manager.git
 cd task-manager
 ```
 
-### 3. Build and Run with Docker
-To run the application in a Docker container, follow these steps:
+### 3. Сборка и запуск с Docker  
+Для запуска приложения в Docker-контейнере выполните:
 
 ```bash
 docker-compose up --build
 ```
-This will create the necessary tables in PostgreSQL using Gorm.
 
-### 4. Application
-Available by port 8081 on local device (modify docker-compose to change)
+Это создаст необходимые таблицы в PostgreSQL с использованием Gorm.
 
-
+### 3. Приложение  
+Доступно по порту 8081 на локальном устройстве.
